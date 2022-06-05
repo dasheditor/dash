@@ -1,6 +1,6 @@
 package io.github.dasheditor.main;
 
-import io.github.dasheditor.gui.DashApplication;
+import io.github.dasheditor.ui.DashApplication;
 import javafx.application.Application;
 
 public class Dash {

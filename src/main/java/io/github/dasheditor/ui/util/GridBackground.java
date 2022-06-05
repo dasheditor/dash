@@ -1,4 +1,4 @@
-package io.github.dasheditor.gui.rendering;
+package io.github.dasheditor.ui.util;
 
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;

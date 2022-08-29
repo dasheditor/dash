@@ -1,24 +1,25 @@
 plugins {
+    kotlin("jvm") version "1.7.10"
     id("application")
-    id("org.openjfx.javafxplugin") version "0.0.10"
+    id("org.openjfx.javafxplugin") version "0.0.13"
+}
+
+application {
+    mainClass.set("io.github.dasheditor.Dash")
 }
 
 group = "io.github.dasheditor"
 version = "0.1.0"
-
-application {
-    mainClass.set("io.github.dasheditor.main.Dash")
-    mainModule.set("dash.main")
-}
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
+    implementation("org.ow2.asm:asm:9.3")
 }
 
 javafx {
-    version = "17.0.1"
-    modules = mutableListOf("javafx.controls")
+    version = "12"
+    modules("javafx.controls")
 }

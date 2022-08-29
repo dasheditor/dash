@@ -1,16 +1,22 @@
 package io.github.dasheditor.ui.controls
 
+import javafx.animation.AnimationTimer
 import javafx.beans.InvalidationListener
+import javafx.event.EventHandler
 import javafx.geometry.HPos
+import javafx.geometry.Point2D
 import javafx.geometry.VPos
 import javafx.scene.canvas.Canvas
 import javafx.scene.image.Image
 import javafx.scene.image.WritableImage
+import javafx.scene.input.MouseButton
+import javafx.scene.input.MouseEvent
 import javafx.scene.layout.Background
 import javafx.scene.layout.BackgroundFill
 import javafx.scene.layout.Pane
 import javafx.scene.paint.Color
 import javafx.scene.paint.ImagePattern
+import javafx.scene.transform.Affine
 
 class NodeEditor : Pane() {
 
@@ -20,20 +26,56 @@ class NodeEditor : Pane() {
         children.add(c)
     }
 
-    private val gridImage = GridImage.createGridImage(100, 100)
-
-    init {
-        val listener = InvalidationListener {
+    private val timer = object : AnimationTimer() {
+        override fun handle(now: Long) {
+            // Redraw canvas at fixed rate (~60 frames/sec)
             redraw()
         }
-        canvas.widthProperty().addListener(listener)
-        canvas.heightProperty().addListener(listener)
+    }
+
+    private val context = canvas.graphicsContext2D
+    private val transform = Affine()
+    private val gridImage = GridImage.createGridImage(100, 100)
+
+    private lateinit var prevMousePosition: Point2D
+
+    init {
+        isFocusTraversable = true
+        setOnMousePressed { mousePressed(it) }
+        setOnMouseDragged { mouseDragged(it) }
+
+        timer.start()
     }
 
     private fun redraw() {
-        val g = canvas.graphicsContext2D
-        g.fill = ImagePattern(gridImage, 0.0, 0.0, 100.0, 100.0, false)
-        g.fillRect(0.0, 0.0, canvas.width, canvas.height)
+        context.fill = ImagePattern(
+            gridImage,
+            transform.tx + canvas.width / 2, transform.ty + canvas.height / 2,
+            100.0, 100.0, false)
+        context.fillRect(0.0, 0.0, canvas.width, canvas.height)
+
+//        context.save()
+//        context.transform = transform
+//        context.restore()
+    }
+
+    private fun mousePressed(event: MouseEvent) {
+        if (event.button != MouseButton.SECONDARY)
+            return
+
+        prevMousePosition = Point2D(event.x, event.y)
+    }
+
+    private fun mouseDragged(event: MouseEvent) {
+        if (event.button != MouseButton.SECONDARY)
+            return
+
+        val current = Point2D(event.x, event.y)
+        val delta = current.subtract(prevMousePosition)
+        prevMousePosition = current
+
+        transform.appendTranslation(delta.x, delta.y)
+        redraw()
     }
 
     override fun layoutChildren() {

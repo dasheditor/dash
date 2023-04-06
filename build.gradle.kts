@@ -1,25 +1,40 @@
-plugins {
-    kotlin("jvm") version "1.7.10"
-    id("application")
-    id("org.openjfx.javafxplugin") version "0.0.13"
-}
+import org.gradle.internal.os.OperatingSystem
 
-application {
-    mainClass.set("io.github.dasheditor.Dash")
+plugins {
+    kotlin("jvm") version "1.8.20"
+    id("application")
 }
 
 group = "io.github.dasheditor"
 version = "0.1.0"
 
+application {
+    mainClass.set("io.github.dasheditor.AppMain")
+}
+
 repositories {
     mavenCentral()
+    maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
 }
+
+val os: OperatingSystem = OperatingSystem.current()
+val targetOs = when {
+    os.isMacOsX -> "macos"
+    os.isWindows -> "windows"
+    os.isLinux -> "linux"
+    else -> error("Unsupported OS: ${os.name}")
+}
+var targetArch = when (val arch = System.getProperty("os.arch")) {
+    "x86_64", "amd64" -> "x64"
+    "aarch64" -> "arm64"
+    else -> error("Unsupported arch: $arch")
+}
+val target = "${targetOs}-${targetArch}"
 
 dependencies {
-    implementation("org.ow2.asm:asm:9.3")
+    implementation("org.jetbrains.skiko:skiko-awt-runtime-$target:0.7.58")
 }
 
-javafx {
-    version = "17"
-    modules("javafx.controls")
+kotlin {
+    jvmToolchain(17)
 }

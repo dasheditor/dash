@@ -116,6 +116,9 @@ public class GraphEditor extends JPanel {
         @Override
         public void mouseDragged(MouseEvent e) {
             if (lastMouseButton == MouseEvent.BUTTON1) {
+                if (selectedNodeIndex < 0)
+                    return;
+
                 Node node = nodeRenderer.getNodeAt(e.getX() - cameraPosition.x, e.getY() - cameraPosition.y);
                 if (node == null)
                     return;

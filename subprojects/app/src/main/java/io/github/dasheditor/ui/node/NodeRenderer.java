@@ -34,7 +34,7 @@ public class NodeRenderer {
         }
 
         // Draw header background.
-        g.clipRect((int) nodeBounds.getX(), (int) nodeBounds.getY(), (int) nodeBounds.getMaxX(), 40);
+        g.clipRect((int) nodeBounds.getX(), (int) nodeBounds.getY(), (int) nodeBounds.getWidth(), 40);
         g.setPaint(new GradientPaint(
                 (float) nodeBounds.getX(), (float) nodeBounds.getCenterY(), new Color(125, 17, 17),
                 (float) nodeBounds.getMaxX(), (float) nodeBounds.getCenterY(), new Color(118, 55, 50, 100)));

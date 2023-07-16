@@ -1,6 +1,5 @@
 package io.github.dasheditor.ui;
 
-import io.github.dasheditor.compiler.Compiler;
 import io.github.dasheditor.model.EventNode;
 import io.github.dasheditor.model.Graph;
 import io.github.dasheditor.ui.component.GraphEditor;

@@ -1,5 +1,10 @@
 package io.github.dasheditor.ui;
 
+import io.github.dasheditor.compiler.Compiler;
+import io.github.dasheditor.model.EventNode;
+import io.github.dasheditor.model.Graph;
+import io.github.dasheditor.ui.component.GraphEditor;
+
 import javax.swing.*;
 
 public class EditorWindow {
@@ -19,7 +24,11 @@ public class EditorWindow {
         menuBar.add(new JMenu("Help"));
         frame.setJMenuBar(menuBar);
 
-        frame.getContentPane().add(new GraphEditor());
+        Graph graph = new Graph();
+        EventNode event = new EventNode("org/bukkit/event/player/PlayerJoinEvent");
+        graph.addNode(event);
+
+        frame.getContentPane().add(new GraphEditor(graph));
     }
 
     public void run() {
